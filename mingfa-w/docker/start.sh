@@ -42,8 +42,10 @@ MOUNT_DIR_A800="  -v /data00:/data00 -v /data01:/data01 -v /data02:/data02 -v /d
 
 GROUP=`id -g -n`
 GROUPID=`id -g`
-OLD_ID=`docker ps -aq -f name=$CONTAINER_NAME -f status=running`
-echo ==== container name: $CONTAINER_NAME
+CMD="docker ps -aq -f name=^$CONTAINER_NAME\$ -f status=running"
+echo CMD=$CMD
+OLD_ID=`$CMD`
+echo ==== container name: $CONTAINER_NAME, OLD_ID: $OLD_ID ===
 
 # if [[ "$1 " == "show" ]]; then
 #     exit
@@ -61,7 +63,9 @@ if [[ $STOP == 1 ]]; then
 fi
 
 if [ -z "$OLD_ID" ]; then
-    ID=`docker run $docker_in_docker $docker_run_flag -t -d --name $CONTAINER_NAME $MOUNT_DIR_A800 -v $MOUNT_DIR:/host --tmpfs /tmp:exec --rm $image `
+    CMD="docker run $docker_in_docker $docker_run_flag -t -d --name $CONTAINER_NAME $MOUNT_DIR_A800 -v $MOUNT_DIR:/host --tmpfs /tmp:exec --rm $image "
+    echo CMD = $CMD
+    ID=`$CMD`
     docker exec --user root $ID groupadd -f -g $GROUPID $GROUP
     docker exec --user root $ID adduser --shell /bin/bash --uid $UID --gecos '' --ingroup $GROUP --disabled-password --home /home/$USER --force-badname $USER
     #docker exec --user root $ID bash -c " echo $USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER && chmod 0440 /etc/sudoers.d/$USER"
