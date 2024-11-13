@@ -49,9 +49,9 @@ function build_triton(){
     cd ${triton_src_dir}
     source $py_venv_dir/bin/activate
 
-    http_proxy=http://sys-proxy-rd-relay.byted.org:3128 \
-    https_proxy=http://sys-proxy-rd-relay.byted.org:3128 \
-    no_proxy=.byted.org \
+    export http_proxy=http://sys-proxy-rd-relay.byted.org:3128
+    export https_proxy=http://sys-proxy-rd-relay.byted.org:3128
+    export no_proxy=.byted.org
     DEBUG=1 \
     TRITON_PLUGIN_DIRS=${src_dir} \
     LLVM_INCLUDE_DIRS=${llvm_install_dir}/include \
