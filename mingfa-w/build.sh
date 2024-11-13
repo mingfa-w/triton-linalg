@@ -3,20 +3,24 @@ export rebuild=0 # 1-重新编译
 TARGET_ARCH=`uname -m`
 TRITON_MAJ_VER=e601be5d
 
+# 下面参数要与utils/docker/Dockerfile中保持一致
+APPS_PATH=/opt/apps
+CODE_PATH=${APPS_PATH}/code
+VENV_PATH=${APPS_PATH}/venv
+
 # llvm-project version
 LLVM_MAJ_VER=triton-e601be5d-llvm-10dc3a8e
 # llvm_install_dir=${HOME}/.local/llvm-$LLVM_MAJ_VER-$TARGET_ARCH
-llvm_install_dir=/opt/llvm_${LLVM_MAJ_VER}
+llvm_install_dir=${APPS_PATH}/llvm_${LLVM_MAJ_VER}
 echo llvm_install_dir=$llvm_install_dir
 # python venv
-py_venv_path=/opt/apps/py3-triton-linalg/bin/activate
+py_venv_dir=${VENV_PATH}/triton-linalg
 
 # triton path
-triton_linalg_src_dir=${current_dir}/..
-triton_src_dir=${triton_linalg_src_dir}/triton
-triton_build_dir=${current_dir}/build
-triton_install_dir=${HOME}/.local/triton-$TRITON_MAJ_VER-$TARGET_ARCH
-triton_dir=${triton_install_dir}/lib/cmake/triton
+src_dir=${current_dir}/..
+triton_src_dir=${src_dir}/triton
+triton_build_dir=${triton_src_dir}/python/build
+triton_install_dir=${triton_build_dir}
 
 # 处理参数
 while getopts "rp:" opt
